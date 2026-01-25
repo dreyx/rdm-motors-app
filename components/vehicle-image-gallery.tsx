@@ -184,26 +184,38 @@ export function VehicleImageGallery({ images, vehicleName }: VehicleImageGallery
       </div>
 
       {isLightboxOpen && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
+        <div
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+          onClick={() => setIsLightboxOpen(false)} // Close when clicking background
+        >
           {/* Close Button */}
           <Button
             variant="ghost"
             size="icon"
             className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white h-12 w-12 z-10"
-            onClick={() => setIsLightboxOpen(false)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLightboxOpen(false);
+            }}
             aria-label="Close lightbox"
           >
             <X className="h-6 w-6" />
           </Button>
 
           {/* Image Counter */}
-          <div className="absolute top-4 left-4 bg-black/70 text-white px-4 py-2 rounded-lg text-sm font-medium backdrop-blur-sm z-10">
+          <div
+            className="absolute top-4 left-4 bg-black/70 text-white px-4 py-2 rounded-lg text-sm font-medium backdrop-blur-sm z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
             {currentIndex + 1} / {images.length}
           </div>
 
           {/* Main Lightbox Image */}
-          <div className="relative w-full h-full flex items-center justify-center p-16">
-            <div className="relative w-full h-full max-w-6xl max-h-full">
+          <div className="relative w-full h-full flex items-center justify-center p-4 md:p-16">
+            <div
+              className="relative w-full h-full max-w-6xl max-h-full flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()} // Prevent close when clicking image/container
+            >
               {images[currentIndex] ? (
                 <Image
                   src={images[currentIndex] || "/placeholder.svg"}
@@ -211,7 +223,7 @@ export function VehicleImageGallery({ images, vehicleName }: VehicleImageGallery
                   fill
                   className="object-contain"
                   quality={90}
-                  sizes="(max-width: 768px) 90vw, (max-width: 1200px) 80vw, 70vw"
+                  sizes="(max-width: 768px) 100vw, 100vw"
                 />
               ) : (
                 <div className="w-full h-full bg-gray-400 flex items-center justify-center rounded">
@@ -229,8 +241,11 @@ export function VehicleImageGallery({ images, vehicleName }: VehicleImageGallery
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white h-16 w-16"
-                onClick={goToPrevious}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white h-16 w-16 z-20"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  goToPrevious()
+                }}
                 aria-label="Previous image"
               >
                 <ChevronLeft className="h-10 w-10" />
@@ -238,8 +253,11 @@ export function VehicleImageGallery({ images, vehicleName }: VehicleImageGallery
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white h-16 w-16"
-                onClick={goToNext}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white h-16 w-16 z-20"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  goToNext()
+                }}
                 aria-label="Next image"
               >
                 <ChevronRight className="h-10 w-10" />
@@ -249,7 +267,10 @@ export function VehicleImageGallery({ images, vehicleName }: VehicleImageGallery
 
           {/* Thumbnail Strip at Bottom */}
           {images.length > 1 && (
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 max-w-4xl w-full px-4">
+            <div
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 max-w-4xl w-full px-4 z-20"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex gap-2 overflow-x-auto pb-2 justify-center scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent">
                 {images.map((image, index) => (
                   <button
@@ -281,9 +302,6 @@ export function VehicleImageGallery({ images, vehicleName }: VehicleImageGallery
               </div>
             </div>
           )}
-
-          {/* Click outside to close */}
-          <div className="absolute inset-0 -z-10" onClick={() => setIsLightboxOpen(false)} />
         </div>
       )}
     </>
