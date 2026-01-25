@@ -67,6 +67,20 @@ export async function uploadSingleVehicleImage(vehicleId: string, imageData: { u
 
 export async function addVehicle(formData: FormData) {
   try {
+    // Parse images if provided (Atomic Save)
+    const imagesJson = formData.get("images") as string
+    let images: string[] = []
+    if (imagesJson) {
+      try {
+        const parsed = JSON.parse(imagesJson)
+        if (Array.isArray(parsed)) {
+          images = parsed
+        }
+      } catch (e) {
+        console.error("Failed to parse images JSON", e)
+      }
+    }
+
     const vehicleData: any = {
       id: crypto.randomUUID(),
       year: Number.parseInt(formData.get("year") as string),
@@ -80,7 +94,7 @@ export async function addVehicle(formData: FormData) {
       status: "available",
       title_status: (formData.get("title_status") as string) || "Clean",
       created_at: new Date().toISOString(),
-      images: [], // Initialize empty images array
+      images: images, // Use prepared images array
     }
 
     const optionalFields = [
@@ -109,7 +123,7 @@ export async function addVehicle(formData: FormData) {
     return { success: true, vehicleId: newVehicle.id }
   } catch (err) {
     console.error(err);
-    return { success: false, error: "Failed to create vehicle" }
+    return { success: false, error: err instanceof Error ? err.message : "Failed to create vehicle" }
   }
 }
 

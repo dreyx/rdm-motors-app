@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { addVehicle, uploadSingleVehicleImage } from "@/app/actions/vehicles"
+import { addVehicle } from "@/app/actions/vehicles"
 import { useRouter } from "next/navigation"
 import { ImageUploadZone } from "@/components/image-upload-zone"
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
@@ -25,82 +25,74 @@ interface AddVehicleFormProps {
 export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [images, setImages] = useState<ImageItem[]>([])
-  const [uploadProgress, setUploadProgress] = useState("")
+  const [failedFields, setFailedFields] = useState<Set<string>>(new Set())
   const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error"; message: string } | null>(null)
   const router = useRouter()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatusMessage(null)
+    setFailedFields(new Set())
+
+    const formData = new FormData(e.currentTarget)
+    const newFailedFields = new Set<string>()
+
+    // Validation
+    const requiredFields = ["year", "make", "model", "mileage", "price", "title_status"]
+
+    requiredFields.forEach(field => {
+      const val = formData.get(field)
+      if (!val || val.toString().trim() === "") {
+        newFailedFields.add(field)
+      }
+    })
 
     if (images.length < 1) {
-      setStatusMessage({ type: "error", message: "Please add at least 1 image before submitting" })
-      return
+      newFailedFields.add("images")
     }
 
-    if (images.length > 15) {
-      setStatusMessage({ type: "error", message: `Maximum 15 images allowed (you have ${images.length})` })
+    if (newFailedFields.size > 0) {
+      setFailedFields(newFailedFields)
+      setStatusMessage({ type: "error", message: "Please fill in all highlighted fields." })
+
+      // Scroll to first error
+      // Prioritize images if it's the only one, or general fields
+      if (newFailedFields.has("year")) scrollToField("year")
+      else if (newFailedFields.has("make")) scrollToField("make")
+      else if (newFailedFields.has("model")) scrollToField("model")
+      else if (newFailedFields.has("mileage")) scrollToField("mileage")
+      else if (newFailedFields.has("price")) scrollToField("price")
+      else if (newFailedFields.has("title_status")) scrollToField("title_status")
+      else if (newFailedFields.has("images")) {
+        const zone = document.getElementById("image-upload-zone")
+        if (zone) zone.scrollIntoView({ behavior: "smooth", block: "center" })
+      }
       return
     }
 
     setIsSubmitting(true)
-    setUploadProgress("Creating vehicle listing...")
 
-    const formData = new FormData(e.currentTarget)
+    // Add images to form data as JSON
+    // We only need the URLs
+    const imageUrls = images.map(img => img.url);
+    formData.append("images", JSON.stringify(imageUrls));
 
     try {
       const result = await addVehicle(formData)
 
       if (!result.success) {
-        setStatusMessage({ type: "error", message: result.error || "Failed to create vehicle" })
-        setIsSubmitting(false)
-        setUploadProgress("")
-        return
+        throw new Error(result.error || "Failed to create vehicle")
       }
 
-      const vehicleId = result.vehicleId!
-
-      let successCount = 0
-      for (let i = 0; i < images.length; i++) {
-        setUploadProgress(`Uploading image ${i + 1} of ${images.length}...`)
-
-        try {
-          const imageResult = await uploadSingleVehicleImage(vehicleId, {
-            url: images[i].url,
-            order: i,
-          })
-
-          if (imageResult.success) {
-            successCount++
-          }
-        } catch (imgError) {
-          // Continue with next image
-        }
-
-        // Small delay between uploads
-        if (i < images.length - 1) {
-          await new Promise((resolve) => setTimeout(resolve, 100))
-        }
-      }
-
-      setUploadProgress("")
-      setIsSubmitting(false)
-
-      if (successCount === images.length) {
-        setStatusMessage({
-          type: "success",
-          message: `Vehicle added successfully with ${successCount} images!`,
-        })
-      } else {
-        setStatusMessage({
-          type: "success",
-          message: `Vehicle added! ${successCount} of ${images.length} images uploaded successfully.`,
-        })
-      }
+      setStatusMessage({
+        type: "success",
+        message: `Vehicle added successfully with ${images.length} images!`,
+      })
 
       // Reset form
       e.currentTarget.reset()
       setImages([])
+      setFailedFields(new Set())
       router.refresh()
 
       if (onSuccess) {
@@ -110,13 +102,37 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
       // Clear success message after 5 seconds
       setTimeout(() => setStatusMessage(null), 5000)
     } catch (error) {
+      console.error("Submission error:", error)
       setStatusMessage({
         type: "error",
-        message: "Network error. Please check your connection and try again.",
+        message: error instanceof Error ? error.message : "Network error. Please check your connection.",
       })
+    } finally {
       setIsSubmitting(false)
-      setUploadProgress("")
     }
+  }
+
+  const scrollToField = (name: string) => {
+    // Try to find by name (input) or id (select trigger usually has id same as label context)
+    // For shadcn Select, we might need to target the Trigger button.
+    // In our form, we gave SelectTrigger an ID for 'year', but maybe not others.
+    // Let's try by name first.
+    const element = document.getElementsByName(name)[0]
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center" })
+      element.focus()
+      return
+    }
+    // Try ID
+    const byId = document.getElementById(name)
+    if (byId) {
+      byId.scrollIntoView({ behavior: "smooth", block: "center" })
+      byId.focus()
+    }
+  }
+
+  const getErrorClass = (name: string) => {
+    return failedFields.has(name) ? "border-red-500 ring-1 ring-red-500" : ""
   }
 
   return (
@@ -138,15 +154,15 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
         )}
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           {/* Vehicle Identity */}
           <div className="space-y-4">
             <h3 className="font-semibold text-sm text-gray-700">Vehicle Identity</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="year">Year *</Label>
-                <Select name="year" required defaultValue={new Date().getFullYear().toString()}>
-                  <SelectTrigger id="year">
+                <Label htmlFor="year" className={failedFields.has("year") ? "text-red-500" : ""}>Year *</Label>
+                <Select name="year" defaultValue={new Date().getFullYear().toString()}>
+                  <SelectTrigger id="year" className={getErrorClass("year")}>
                     <SelectValue placeholder="Select year" />
                   </SelectTrigger>
                   <SelectContent>
@@ -159,15 +175,15 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="make">Make *</Label>
-                <Input id="make" name="make" required />
+                <Label htmlFor="make" className={failedFields.has("make") ? "text-red-500" : ""}>Make *</Label>
+                <Input id="make" name="make" className={getErrorClass("make")} />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="model">Model *</Label>
-                <Input id="model" name="model" required />
+                <Label htmlFor="model" className={failedFields.has("model") ? "text-red-500" : ""}>Model *</Label>
+                <Input id="model" name="model" className={getErrorClass("model")} />
               </div>
               <div>
                 <Label htmlFor="trim">Trim</Label>
@@ -221,9 +237,9 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="title_status">Title *</Label>
-              <Select name="title_status" required>
-                <SelectTrigger>
+              <Label htmlFor="title_status" className={failedFields.has("title_status") ? "text-red-500" : ""}>Title *</Label>
+              <Select name="title_status">
+                <SelectTrigger id="title_status" className={getErrorClass("title_status")}>
                   <SelectValue placeholder="Select title status" />
                 </SelectTrigger>
                 <SelectContent position="popper">
@@ -309,12 +325,12 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
             <h3 className="font-semibold text-sm text-gray-700">Mileage & Pricing</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="mileage">Mileage *</Label>
-                <Input id="mileage" name="mileage" type="number" required min="0" />
+                <Label htmlFor="mileage" className={failedFields.has("mileage") ? "text-red-500" : ""}>Mileage *</Label>
+                <Input id="mileage" name="mileage" type="number" min="0" className={getErrorClass("mileage")} />
               </div>
               <div>
-                <Label htmlFor="price">Price *</Label>
-                <Input id="price" name="price" type="number" required min="0" step="1" />
+                <Label htmlFor="price" className={failedFields.has("price") ? "text-red-500" : ""}>Price *</Label>
+                <Input id="price" name="price" type="number" min="0" step="1" className={getErrorClass("price")} />
               </div>
             </div>
           </div>
@@ -331,12 +347,12 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
           </div>
 
           {/* Images */}
-          <div>
-            <Label>Vehicle Images (Recommended: 5-10 images)</Label>
+          <div id="image-upload-zone" className={failedFields.has("images") ? "p-1 border border-red-500 rounded-lg" : ""}>
+            <Label className={failedFields.has("images") ? "text-red-500" : ""}>Vehicle Images (Recommended: 5-10 images) *</Label>
             <ImageUploadZone images={images} onImagesChange={setImages} />
             {images.length > 0 && (
               <p className="text-xs text-muted-foreground mt-2">
-                {images.length} image{images.length !== 1 ? "s" : ""} ready to upload
+                {images.length} image{images.length !== 1 ? "s" : ""} included
               </p>
             )}
           </div>
@@ -345,7 +361,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
             {isSubmitting ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                {uploadProgress || "Processing..."}
+                Saving Vehicle...
               </span>
             ) : (
               "Add Vehicle"
