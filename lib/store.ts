@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { MOCK_VEHICLES_DATA } from './mock-vehicles';
+import { getVehiclesFromGitHub, saveVehiclesToGitHub } from './github-store';
 
 const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'vehicles.json');
 
@@ -34,6 +35,7 @@ export interface Vehicle {
 
 // Ensure data directory exists
 async function ensureDataDir() {
+  if (process.env.GITHUB_TOKEN) return; // Skip in prod/GitHub mode
   const dir = path.dirname(DATA_FILE_PATH);
   try {
     await fs.access(dir);
@@ -44,23 +46,33 @@ async function ensureDataDir() {
 
 // Initialize data if not exists
 async function initData() {
+  if (process.env.GITHUB_TOKEN) return; // Skip in prod
   await ensureDataDir();
   try {
     await fs.access(DATA_FILE_PATH);
   } catch {
-    // If file doesn't exist, seed it with mock data
-    // Ensure mock data matches the Vehicle interface roughly (images is array of strings)
     await fs.writeFile(DATA_FILE_PATH, JSON.stringify(MOCK_VEHICLES_DATA, null, 2), 'utf-8');
   }
 }
 
 export async function getAllVehicles(): Promise<Vehicle[]> {
+  // Priority: GitHub API (Always Fresh)
+  if (process.env.GITHUB_TOKEN) {
+    try {
+      const vehicles = await getVehiclesFromGitHub();
+      if (vehicles.length > 0) return vehicles;
+    } catch (e) {
+      console.error("Failed to fetch from GitHub, falling back to FS", e);
+    }
+  }
+
+  // Fallback: Local File System
   await initData();
   try {
     const data = await fs.readFile(DATA_FILE_PATH, 'utf-8');
     return JSON.parse(data);
   } catch (error) {
-    console.error("Error reading vehicles data:", error);
+    console.error("Error reading vehicles data from FS:", error);
     return [];
   }
 }
@@ -71,8 +83,20 @@ export async function getVehiclesByStatus(status: string): Promise<Vehicle[]> {
 }
 
 export async function saveVehicles(vehicles: Vehicle[]) {
-  await ensureDataDir();
-  await fs.writeFile(DATA_FILE_PATH, JSON.stringify(vehicles, null, 2), 'utf-8');
+  // Priority: GitHub API
+  if (process.env.GITHUB_TOKEN) {
+    await saveVehiclesToGitHub(vehicles);
+    // Continue to write to FS just in case (e.g. for revalidatePath to pick up something? mainly dev)
+  }
+
+  // Local File System
+  try {
+    await ensureDataDir();
+    await fs.writeFile(DATA_FILE_PATH, JSON.stringify(vehicles, null, 2), 'utf-8');
+  } catch (e) {
+    // Ignore FS errors in prod if GitHub worked
+    if (!process.env.GITHUB_TOKEN) throw e;
+  }
 }
 
 export async function addVehicleToStore(vehicle: Vehicle) {
@@ -86,7 +110,7 @@ export async function updateVehicleInStore(id: string, updates: Partial<Vehicle>
   const vehicles = await getAllVehicles();
   const index = vehicles.findIndex(v => v.id === id);
   if (index === -1) throw new Error('Vehicle not found');
-  
+
   const updatedVehicle = { ...vehicles[index], ...updates };
   vehicles[index] = updatedVehicle;
   await saveVehicles(vehicles);
