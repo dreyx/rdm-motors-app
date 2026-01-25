@@ -6,13 +6,8 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
 
-          {/* Left: Branding & Contact */}
+          {/* Left: Contact Info (Branding removed) */}
           <div className="flex flex-col items-center md:items-start space-y-4 text-center md:text-left">
-            <div>
-              <h3 className="text-2xl font-black italic tracking-tighter text-white">RDM MOTORS</h3>
-              <p className="text-xs text-zinc-500 font-medium tracking-widest uppercase mt-1">Quality Used Cars</p>
-            </div>
-
             <div className="space-y-1.5 text-sm text-zinc-400">
               <a
                 href="tel:6418624429"
@@ -70,13 +65,6 @@ export function Footer() {
             </div>
           </div>
 
-        </div>
-
-        {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-white/5 text-center">
-          <p className="text-[10px] text-zinc-600 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} RDM Motors LLC. All Rights Reserved.
-          </p>
         </div>
       </div>
     </footer>
