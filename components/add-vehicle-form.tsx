@@ -132,7 +132,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
   }
 
   const getErrorClass = (name: string) => {
-    return failedFields.has(name) ? "border-red-500 ring-1 ring-red-500" : ""
+    return failedFields.has(name) ? "border-red-500 ring-1 ring-red-500 bg-red-50" : ""
   }
 
   return (

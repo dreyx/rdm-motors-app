@@ -63,6 +63,7 @@ export function EditVehicleDialog({
   const [status, setStatus] = useState("")
   const [images, setImages] = useState<ImageItem[]>([])
   const [originalImages, setOriginalImages] = useState<ImageItem[]>([])
+  const [failedFields, setFailedFields] = useState<Set<string>>(new Set())
   const router = useRouter()
 
   useEffect(() => {
@@ -90,11 +91,29 @@ export function EditVehicleDialog({
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setIsSubmitting(true)
+    setFailedFields(new Set())
     setError(null)
     setSuccess(false)
 
     const formData = new FormData(e.currentTarget)
+    const newFailedFields = new Set<string>()
+
+    // Validation
+    const requiredFields = ["year", "make", "model", "mileage", "price", "title_status"]
+    requiredFields.forEach(field => {
+      const val = formData.get(field)
+      if (!val || val.toString().trim() === "") {
+        newFailedFields.add(field)
+      }
+    })
+
+    if (newFailedFields.size > 0) {
+      setFailedFields(newFailedFields)
+      setError("Please fill in all highlighted fields.")
+      return
+    }
+
+    setIsSubmitting(true)
 
     try {
       setStatus("Updating")
@@ -147,7 +166,12 @@ export function EditVehicleDialog({
       console.error("[v0] Edit vehicle error:", err)
       setIsSubmitting(false)
       setStatus("")
+      setError(err instanceof Error ? err.message : "An unexpected error occurred")
     }
+  }
+
+  const getErrorClass = (name: string) => {
+    return failedFields.has(name) ? "border-red-500 ring-1 ring-red-500 bg-red-50" : ""
   }
 
   return (
@@ -161,19 +185,19 @@ export function EditVehicleDialog({
             <h3 className="font-semibold text-sm text-gray-700">Vehicle Identity</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="year">Year *</Label>
-                <Input id="year" name="year" type="number" required min="1900" max="2099" defaultValue={vehicle.year} />
+                <Label htmlFor="year" className={failedFields.has("year") ? "text-red-500" : ""}>Year *</Label>
+                <Input id="year" name="year" type="number" min="1900" max="2099" defaultValue={vehicle.year} className={getErrorClass("year")} />
               </div>
               <div>
-                <Label htmlFor="make">Make *</Label>
-                <Input id="make" name="make" required defaultValue={vehicle.make} />
+                <Label htmlFor="make" className={failedFields.has("make") ? "text-red-500" : ""}>Make *</Label>
+                <Input id="make" name="make" defaultValue={vehicle.make} className={getErrorClass("make")} />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="model">Model *</Label>
-                <Input id="model" name="model" required defaultValue={vehicle.model} />
+                <Label htmlFor="model" className={failedFields.has("model") ? "text-red-500" : ""}>Model *</Label>
+                <Input id="model" name="model" defaultValue={vehicle.model} className={getErrorClass("model")} />
               </div>
               <div>
                 <Label htmlFor="trim">Trim</Label>
@@ -228,8 +252,8 @@ export function EditVehicleDialog({
 
             <div>
               <Label htmlFor="title_status">Title *</Label>
-              <Select name="title_status" defaultValue={vehicle.title_status || "Clean"} required>
-                <SelectTrigger>
+              <Select name="title_status" defaultValue={vehicle.title_status || "Clean"}>
+                <SelectTrigger className={getErrorClass("title_status")}>
                   <SelectValue placeholder="Select title status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -312,12 +336,12 @@ export function EditVehicleDialog({
             <h3 className="font-semibold text-sm text-gray-700">Mileage & Pricing</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="mileage">Mileage *</Label>
-                <Input id="mileage" name="mileage" type="number" required min="0" defaultValue={vehicle.mileage} />
+                <Label htmlFor="mileage" className={failedFields.has("mileage") ? "text-red-500" : ""}>Mileage *</Label>
+                <Input id="mileage" name="mileage" type="number" min="0" defaultValue={vehicle.mileage} className={getErrorClass("mileage")} />
               </div>
               <div>
-                <Label htmlFor="price">Price *</Label>
-                <Input id="price" name="price" type="number" required min="0" step="1" defaultValue={vehicle.price} />
+                <Label htmlFor="price" className={failedFields.has("price") ? "text-red-500" : ""}>Price *</Label>
+                <Input id="price" name="price" type="number" min="0" step="1" defaultValue={vehicle.price} className={getErrorClass("price")} />
               </div>
             </div>
           </div>

@@ -154,10 +154,10 @@ export function VehicleImageGallery({ images, vehicleName }: VehicleImageGallery
                 key={index}
                 onClick={() => {
                   goToImage(index)
-                  setIsLightboxOpen(true) // Open lightbox immediately on thumbnail click as requested
+                  // setIsLightboxOpen(true) // Removed to prevent auto-opening
                 }}
                 className={`flex-shrink-0 w-24 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 ${index === currentIndex
-                  ? "border-brand-red scale-105 shadow-lg"
+                  ? "border-green-500 scale-105 shadow-lg" // Green border as requested/seen in reference
                   : "border-transparent opacity-60 hover:opacity-100 hover:scale-105"
                   }`}
                 aria-label={`View image ${index + 1}`}

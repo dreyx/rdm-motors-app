@@ -145,8 +145,12 @@ export async function addVehicle(formData: FormData) {
 
     const newVehicle = await addVehicleToStore(vehicleData as Vehicle);
 
-    revalidatePath("/admin")
-    revalidatePath("/")
+    try {
+      revalidatePath("/admin")
+      revalidatePath("/")
+    } catch (e) {
+      console.warn("Revalidation failed (non-critical):", e)
+    }
     return { success: true, vehicleId: newVehicle.id }
   } catch (err) {
     console.error(err);
@@ -226,8 +230,12 @@ export async function updateVehicle(id: string, formData: FormData) {
     await updateVehicleInStore(id, vehicleData);
 
     // Revalidate cache
-    revalidatePath("/admin")
-    revalidatePath("/")
+    try {
+      revalidatePath("/admin")
+      revalidatePath("/")
+    } catch (e) {
+      console.warn("Revalidation failed:", e)
+    }
 
     return { success: true }
   } catch (err) {
