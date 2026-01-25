@@ -53,11 +53,17 @@
     "images": [
       "https://scontent.fmli2-1.fna.fbcdn.net/v/t39.30808-6/617917102_25959720503651993_5027501434231147723_n.jpg?stp=c138.0.1773.1773a_dst-jpg_s261x260_tt6&_nc_cat=101&ccb=1-7&_nc_sid=454cf4&_nc_ohc=uGE4OoAuo2UQ7kNvwFzLBtD&_nc_oc=AdmifCSl3XuRKN0GK0ZtgTgm2m8tWJG_8PZ8WSPMex6t44RnqtaeHo3IBqfd2_ItwF4&_nc_zt=23&_nc_ht=scontent.fmli2-1.fna&_nc_gid=EBNgEqZBZS2621yaFxuO_A&oh=00_AfowTw5R0UovsyahdhdMQWjl0lsB_SySf8Mt7E87hjmTdw&oe=697B90EF"
     ],
-    "description": "2016 Dodge Durango Limited Sport Utility 4D. Imported from Facebook Marketplace.",
+    "description": "2016 Dodge Durango Limited AWD with a 3.6L v6 automatic transmission with 128,xxx miles. Runs and drives great, new tires, clean inside and out, keyless entry, push button start with remote start, power tailgate, leather interior. Heated seats, heated steering wheel, navigation system, backup camera, and lots more. Rebuilt Title",
     "created_at": "2026-01-25T01:30:00.000Z",
     "condition": "Used",
-    "fuel_type": "Gasoline",
-    "body_style": "SUV"
+    "fuel_type": "Gas",
+    "body_style": "SUV",
+    "stock_number": null,
+    "engine": null,
+    "drivetrain": "FWD",
+    "exterior_color": null,
+    "interior_color": null,
+    "vin": null
   },
   {
     "id": "1a2b3c4d-5e6f-7890-a1b2-c3d4e5f6g7h8",
