@@ -1,5 +1,22 @@
 [
   {
+    "id": "4a33e54e-55cb-4a6f-92eb-632f6dfec539",
+    "year": 2021,
+    "make": "Final",
+    "model": "Test",
+    "trim": null,
+    "price": 123,
+    "mileage": 123,
+    "transmission": "Automatic",
+    "description": null,
+    "status": "available",
+    "title_status": "Rebuilt",
+    "created_at": "2026-01-25T06:28:06.451Z",
+    "images": [],
+    "condition": "Used",
+    "fuel_type": "Gas"
+  },
+  {
     "id": "510f9db2-a19f-4971-a229-e910e09c412b",
     "year": 2021,
     "make": "Final",
