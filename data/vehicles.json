@@ -1,5 +1,22 @@
 [
   {
+    "id": "1bed4f3e-c703-4737-b5a2-d040851a96ce",
+    "year": 2026,
+    "make": "FD",
+    "model": "FD",
+    "trim": null,
+    "price": 11,
+    "mileage": 1,
+    "transmission": "Automatic",
+    "description": null,
+    "status": "available",
+    "title_status": "Rebuilt",
+    "created_at": "2026-01-25T06:34:20.737Z",
+    "images": [],
+    "condition": "Used",
+    "fuel_type": "Gas"
+  },
+  {
     "id": "486385fe-d35c-4233-8b61-73726b0b9e01",
     "year": 2016,
     "make": "GMC",
