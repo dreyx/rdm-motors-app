@@ -57,11 +57,11 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-end gap-6 text-center md:text-right">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-1">Established</p>
-              <p className="text-2xl font-bold text-white leading-none">2017</p>
+              <p className="text-2xl font-bold text-white leading-none">2020</p>
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-1">Dealer Number</p>
-              <p className="text-base font-medium text-zinc-400">#D50578</p>
+              <p className="text-base font-medium text-zinc-400">#5679</p>
             </div>
           </div>
 

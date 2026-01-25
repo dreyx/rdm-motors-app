@@ -71,6 +71,8 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
 
   const displayDescription = vehicle.description || autoDescription
 
+
+
   return (
     <Card className="premium-card group overflow-hidden flex flex-col bg-white border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300">
       <Link href={`/vehicles/${vehicle.id}`} className="flex-1 flex flex-col group/link">
@@ -133,6 +135,18 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
 
         <CardContent className="p-5 flex-1 border-t border-slate-100/50">
           <div className="mb-4">
+            <div className="flex flex-wrap gap-2 mb-2">
+              {(vehicle.drivetrain?.toLowerCase().includes("awd") || vehicle.drivetrain?.toLowerCase().includes("4wd") || vehicle.drivetrain?.toLowerCase().includes("4x4")) && (
+                <span className="inline-flex items-center px-2 py-1 rounded bg-blue-100 text-blue-700 text-[10px] font-black uppercase tracking-wider border border-blue-200">
+                  {vehicle.drivetrain?.toLowerCase().includes("4wd") || vehicle.drivetrain?.toLowerCase().includes("4x4") ? "4WD" : "AWD"}
+                </span>
+              )}
+              {vehicle.mileage < 100000 && (
+                <span className="inline-flex items-center px-2 py-1 rounded bg-green-100 text-green-700 text-[10px] font-black uppercase tracking-wider border border-green-200">
+                  Low Mileage
+                </span>
+              )}
+            </div>
             <h3 className="text-xl font-black text-slate-900 group-hover/link:text-brand-red transition-colors leading-tight uppercase">
               {vehicle.year} {vehicle.make} {vehicle.model} {vehicle.trim}
             </h3>
@@ -145,19 +159,41 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
             {displayDescription}
           </p>
 
-          {/* Specs Grid - Horizontal Lines */}
-          <div className="space-y-2 text-sm mb-4">
-            <div className="flex justify-between items-center py-1.5 border-b border-slate-50">
-              <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Mileage</span>
-              <span className="font-bold text-slate-700">{formatMileage(vehicle.mileage)} mi</span>
-            </div>
-            <div className="flex justify-between items-center py-1.5 border-b border-slate-50">
-              <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Transmission</span>
-              <span className="font-bold text-slate-700">{vehicle.transmission || "Auto"}</span>
-            </div>
-            <div className="flex justify-between items-center py-1.5 border-b border-slate-50">
-              <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Engine</span>
-              <span className="font-bold text-slate-700 truncate max-w-[120px] text-right">{vehicle.fuel_type || "Gas"}</span>
+          {/* Specs Grid - Ford-Style Two Column */}
+          <div className="bg-slate-50 border border-slate-100 rounded-md p-3 mb-4">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+              {vehicle.exterior_color && (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-bold">Exterior:</span>
+                    <span className="font-bold text-slate-800 text-right">{vehicle.exterior_color}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500 font-bold">Interior:</span>
+                    <span className="font-bold text-slate-800 text-right">{vehicle.interior_color || "—"}</span>
+                  </div>
+                </>
+              )}
+              {vehicle.drivetrain && (
+                <div className="flex justify-between">
+                  <span className="text-slate-500 font-bold">Drivetrain:</span>
+                  <span className="font-bold text-slate-800 text-right">{vehicle.drivetrain}</span>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="text-slate-500 font-bold">Transmission:</span>
+                <span className="font-bold text-slate-800 text-right">{vehicle.transmission || "Auto"}</span>
+              </div>
+              {vehicle.engine && (
+                <div className="flex justify-between col-span-2">
+                  <span className="text-slate-500 font-bold">Engine:</span>
+                  <span className="font-bold text-slate-800 text-right truncate max-w-[180px]">{vehicle.engine}</span>
+                </div>
+              )}
+              <div className="flex justify-between col-span-2 pt-1 border-t border-slate-200 mt-1">
+                <span className="text-slate-500 font-bold">Mileage:</span>
+                <span className="font-black text-slate-900">{formatMileage(vehicle.mileage)} mi</span>
+              </div>
             </div>
           </div>
         </CardContent>

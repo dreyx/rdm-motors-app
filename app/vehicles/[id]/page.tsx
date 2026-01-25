@@ -39,7 +39,6 @@ export default async function VehicleDetailPage({
               <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Inventory
             </Link>
             <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
-              Stock: #{id.slice(0, 8).toUpperCase()}
             </div>
           </div>
         </div>
@@ -53,13 +52,12 @@ export default async function VehicleDetailPage({
               {/* Mobile Header */}
               <div className="lg:hidden mb-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand-red animate-pulse"></span>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{vehicle.year} {vehicle.make}</p>
+                  <span className="h-2 w-2 rounded-full bg-brand-red animate-pulse"></span>
+                  <h1 className="text-2xl font-black uppercase tracking-tighter leading-tight text-slate-900">
+                    {vehicle.year} {vehicle.make} {vehicle.model}
+                  </h1>
                 </div>
-                <h1 className="text-3xl font-black text-slate-900 tracking-tighter uppercase leading-none">
-                  {vehicle.model}
-                </h1>
-                <p className="text-sm text-slate-500 mt-2 font-bold tracking-wide uppercase">{vehicle.trim}</p>
+                <p className="text-sm text-slate-500 font-bold tracking-wide uppercase pl-4">{vehicle.trim}</p>
                 <div className="mt-6 flex items-baseline gap-2">
                   <span className="text-4xl font-black text-slate-900 tracking-tighter">${vehicle.price?.toLocaleString()}</span>
                 </div>
@@ -94,12 +92,13 @@ export default async function VehicleDetailPage({
               {/* Pricing & Actions Card - Streamlined */}
               <div className="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-200 p-6 hidden lg:block">
                 <div className="mb-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-brand-red"></span>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{vehicle.year} {vehicle.make}</p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="h-2 w-2 rounded-full bg-brand-red"></span>
+                    <h1 className="text-3xl font-black uppercase tracking-tighter leading-tight text-slate-900">
+                      {vehicle.year} {vehicle.make} {vehicle.model}
+                    </h1>
                   </div>
-                  <h1 className="text-3xl font-black text-brand-black tracking-tighter uppercase leading-none">{vehicle.model}</h1>
-                  <p className="text-slate-500 font-bold mt-1 text-xs uppercase tracking-widest">{vehicle.trim}</p>
+                  <p className="text-slate-500 font-bold text-sm uppercase tracking-widest pl-4">{vehicle.trim}</p>
                 </div>
 
                 <div className="flex flex-col mb-6 border-y border-slate-100 py-6">
@@ -118,14 +117,24 @@ export default async function VehicleDetailPage({
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {[
+                    { label: 'Model Year', value: vehicle.year },
                     { label: 'Mileage', value: `${formatMileage(vehicle.mileage)} mi` },
+                    { label: 'Drivetrain', value: vehicle.drivetrain },
                     { label: 'Transmission', value: vehicle.transmission || "Automatic" },
+                    { label: 'Engine', value: vehicle.engine },
                     { label: 'Fuel Type', value: vehicle.fuel_type || "Gasoline" },
-                    { label: 'Model Year', value: vehicle.year }
-                  ].map((spec, i) => (
+                    { label: 'Exterior Color', value: vehicle.exterior_color },
+                    { label: 'Interior Color', value: vehicle.interior_color },
+                    { label: 'Body Style', value: vehicle.body_style },
+                    { label: 'Condition', value: vehicle.condition },
+                    { label: 'Title Status', value: vehicle.title_status },
+                    { label: 'VIN', value: vehicle.vin },
+                    { label: 'Doors', value: vehicle.doors },
+                    { label: 'Seats', value: vehicle.seats },
+                  ].filter(spec => spec.value !== null && spec.value !== undefined && spec.value !== "").map((spec, i) => (
                     <div key={i} className="space-y-1 p-3 bg-slate-50/50 border border-transparent hover:border-slate-100 transition-colors">
                       <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest leading-none">{spec.label}</p>
-                      <p className="font-bold text-slate-900 text-sm">{spec.value}</p>
+                      <p className="font-bold text-slate-900 text-sm break-words">{spec.value}</p>
                     </div>
                   ))}
                 </div>
