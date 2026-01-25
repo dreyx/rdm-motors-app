@@ -141,7 +141,7 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
 
 
           {/* Description Snippet */}
-          <p className="text-xs text-slate-500 mb-4 leading-relaxed bg-slate-50 p-2.5 rounded-md border border-slate-100">
+          <p className="text-sm text-slate-700 mb-4 leading-relaxed bg-slate-50 p-3 rounded-md border border-slate-100 font-medium">
             {displayDescription}
           </p>
 

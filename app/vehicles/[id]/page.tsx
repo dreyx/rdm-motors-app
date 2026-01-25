@@ -79,7 +79,7 @@ export default async function VehicleDetailPage({
                   <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest">Overview</h2>
                 </div>
                 {vehicle.description ? (
-                  <div className="text-sm text-slate-600 font-medium leading-relaxed whitespace-pre-line max-w-none">
+                  <div className="text-base text-slate-800 font-medium leading-relaxed whitespace-pre-line max-w-none">
                     {vehicle.description}
                   </div>
                 ) : (

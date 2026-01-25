@@ -28,7 +28,7 @@ export function Header() {
           >
             <a href="tel:6418624429">
               <Phone className="h-4 w-4" />
-              <span>Call Now</span>
+              <span>641-862-4429</span>
             </a>
           </Button>
         </div>

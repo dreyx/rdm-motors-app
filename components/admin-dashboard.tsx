@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import useSWR from "swr"
 import { AdminVehicleList } from "@/components/admin-vehicle-list"
 import { AddVehicleForm } from "@/components/add-vehicle-form"
@@ -65,6 +66,15 @@ export function AdminDashboard() {
 
   const vehicles = vehiclesData?.vehicles || []
 
+
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    await mutateVehicles()
+    setTimeout(() => setIsRefreshing(false), 500)
+  }
+
   return (
     <>
       <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -73,9 +83,9 @@ export function AdminDashboard() {
           <p className="text-slate-500 mt-1">Add, edit, and manage your vehicle listings</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={() => mutateVehicles()} disabled={vehiclesLoading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${vehiclesLoading ? 'animate-spin' : ''}`} />
-            Refresh
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={vehiclesLoading || isRefreshing}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${vehiclesLoading || isRefreshing ? 'animate-spin' : ''}`} />
+            {vehiclesLoading || isRefreshing ? "Refreshing..." : "Refresh"}
           </Button>
           <LogoutButton />
         </div>
