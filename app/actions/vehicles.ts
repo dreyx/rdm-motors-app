@@ -8,6 +8,13 @@ import {
   Vehicle
 } from "@/lib/store"
 import { revalidatePath } from "next/cache"
+import {
+  sanitizeString,
+  sanitizeImageUrls,
+  sanitizeYear,
+  sanitizeNumber,
+  sanitizeVIN
+} from "@/lib/sanitize"
 
 export async function getVehicles() {
   try {
@@ -67,38 +74,52 @@ export async function uploadSingleVehicleImage(vehicleId: string, imageData: { u
 
 export async function addVehicle(formData: FormData) {
   try {
-    // Parse images if provided (Atomic Save)
+    // Parse and sanitize images if provided (Atomic Save)
     const imagesJson = formData.get("images") as string
     let images: string[] = []
     if (imagesJson) {
       try {
         const parsed = JSON.parse(imagesJson)
         if (Array.isArray(parsed)) {
-          images = parsed
+          // Sanitize image URLs to prevent XSS via data: URLs
+          images = sanitizeImageUrls(parsed)
         }
       } catch (e) {
         console.error("Failed to parse images JSON", e)
       }
     }
 
-    const vehicleData: any = {
-      id: crypto.randomUUID(),
-      year: Number.parseInt(formData.get("year") as string),
-      make: formData.get("make") as string,
-      model: formData.get("model") as string,
-      trim: (formData.get("trim") as string) || null,
-      price: Number.parseFloat(formData.get("price") as string),
-      mileage: Number.parseInt(formData.get("mileage") as string),
-      transmission: (formData.get("transmission") as string) || "Automatic",
-      description: (formData.get("description") as string) || null,
-      status: "available",
-      title_status: (formData.get("title_status") as string) || "Clean",
-      created_at: new Date().toISOString(),
-      images: images, // Use prepared images array
+    // Sanitize all string inputs
+    const make = sanitizeString(formData.get("make") as string)
+    const model = sanitizeString(formData.get("model") as string)
+    const trim = sanitizeString(formData.get("trim") as string) || null
+    const description = sanitizeString(formData.get("description") as string) || null
+    const transmission = sanitizeString(formData.get("transmission") as string) || "Automatic"
+    const titleStatus = sanitizeString(formData.get("title_status") as string) || "Clean"
+
+    // Validate required fields
+    if (!make || !model) {
+      return { success: false, error: "Make and Model are required" }
     }
 
-    const optionalFields = [
-      "vin",
+    const vehicleData: any = {
+      id: crypto.randomUUID(),
+      year: sanitizeYear(formData.get("year") as string),
+      make,
+      model,
+      trim,
+      price: sanitizeNumber(formData.get("price") as string, 0, 10000000),
+      mileage: Math.floor(sanitizeNumber(formData.get("mileage") as string, 0, 1000000)),
+      transmission,
+      description,
+      status: "available",
+      title_status: titleStatus,
+      created_at: new Date().toISOString(),
+      images,
+    }
+
+    // Handle optional fields with sanitization
+    const optionalStringFields = [
       "stock_number",
       "body_style",
       "condition",
@@ -109,12 +130,18 @@ export async function addVehicle(formData: FormData) {
       "interior_color",
     ]
 
-    optionalFields.forEach((field) => {
+    optionalStringFields.forEach((field) => {
       const value = formData.get(field) as string
       if (value && value.trim()) {
-        vehicleData[field] = value.trim()
+        vehicleData[field] = sanitizeString(value)
       }
     })
+
+    // Special handling for VIN
+    const vin = formData.get("vin") as string
+    if (vin && vin.trim()) {
+      vehicleData.vin = sanitizeVIN(vin)
+    }
 
     const newVehicle = await addVehicleToStore(vehicleData as Vehicle);
 
@@ -151,10 +178,10 @@ export async function updateVehicleStatus(id: string, status: string) {
 
 export async function updateVehicle(id: string, formData: FormData) {
   try {
-    // Validate required fields
+    // Sanitize and validate required fields
+    const make = sanitizeString(formData.get("make") as string)
+    const model = sanitizeString(formData.get("model") as string)
     const year = formData.get("year")
-    const make = formData.get("make")
-    const model = formData.get("model")
     const price = formData.get("price")
     const mileage = formData.get("mileage")
 
@@ -162,22 +189,21 @@ export async function updateVehicle(id: string, formData: FormData) {
       return { success: false, error: "Missing required fields" }
     }
 
-    // Build update object
+    // Build update object with sanitization
     const vehicleData: Record<string, any> = {
-      year: Number.parseInt(year as string),
-      make: make as string,
-      model: model as string,
-      trim: (formData.get("trim") as string) || null,
-      price: Number.parseFloat(price as string),
-      mileage: Number.parseInt(mileage as string),
-      transmission: (formData.get("transmission") as string) || "Automatic",
-      description: (formData.get("description") as string) || null,
-      title_status: (formData.get("title_status") as string) || "Clean",
+      year: sanitizeYear(year as string),
+      make,
+      model,
+      trim: sanitizeString(formData.get("trim") as string) || null,
+      price: sanitizeNumber(price as string, 0, 10000000),
+      mileage: Math.floor(sanitizeNumber(mileage as string, 0, 1000000)),
+      transmission: sanitizeString(formData.get("transmission") as string) || "Automatic",
+      description: sanitizeString(formData.get("description") as string) || null,
+      title_status: sanitizeString(formData.get("title_status") as string) || "Clean",
     }
 
-    // Add optional fields
+    // Add optional fields with sanitization
     const optionalFields = [
-      "vin",
       "stock_number",
       "body_style",
       "condition",
@@ -190,8 +216,12 @@ export async function updateVehicle(id: string, formData: FormData) {
 
     for (const field of optionalFields) {
       const value = formData.get(field) as string
-      vehicleData[field] = value?.trim() || null
+      vehicleData[field] = value ? sanitizeString(value) : null
     }
+
+    // Special handling for VIN
+    const vin = formData.get("vin") as string
+    vehicleData.vin = vin ? sanitizeVIN(vin) : null
 
     await updateVehicleInStore(id, vehicleData);
 
