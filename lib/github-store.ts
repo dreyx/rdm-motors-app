@@ -6,17 +6,27 @@ const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const FILE_PATH = 'data/vehicles.json';
 
-// Read from GitHub Raw (Fast, Cached)
+// Read from GitHub API (Always Fresh)
 export async function getVehiclesFromGitHub(): Promise<Vehicle[]> {
-    if (!GITHUB_TOKEN) return []; // Fallback or Error
+    if (!GITHUB_TOKEN) return [];
 
-    const url = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${FILE_PATH}`;
+    const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
     try {
-        const res = await fetch(url, {
-            next: { revalidate: 60 } // Cache for 1 minute
+        const res = await fetch(apiUrl, {
+            headers: {
+                'Authorization': `Bearer ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json',
+            },
+            cache: 'no-store'
         });
+
         if (!res.ok) return [];
-        return await res.json();
+
+        const data = await res.json();
+        if (!data.content) return [];
+
+        const content = Buffer.from(data.content, 'base64').toString('utf-8');
+        return JSON.parse(content);
     } catch (error) {
         console.error("GitHub Fetch Error:", error);
         return [];

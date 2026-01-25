@@ -14,22 +14,6 @@ export default function AdminLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Bot detection: honeypot field should be empty
-    if (honeypot) {
-      // Silently fail for bots
-      await new Promise(r => setTimeout(r, 2000))
-      setError("Access denied")
-      return
-    }
-
-    // Bot detection: form submitted too fast (under 1 second)
-    const submitTime = Date.now()
-    if (submitTime - loadTime < 1000) {
-      await new Promise(r => setTimeout(r, 2000))
-      setError("Access denied")
-      return
-    }
-
     setIsLoading(true)
     setError(null)
 
@@ -46,8 +30,7 @@ export default function AdminLoginPage() {
         throw new Error(data.error || "Invalid credentials")
       }
 
-      router.push("/admin")
-      router.refresh()
+      window.location.href = "/admin"
     } catch (err) {
       setError(err instanceof Error ? err.message : "Access denied")
       setIsLoading(false)
