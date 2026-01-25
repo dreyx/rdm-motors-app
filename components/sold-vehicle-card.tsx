@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { Facebook } from "lucide-react"
 
 interface SoldVehicleCardProps {
     vehicle: {
@@ -61,6 +62,12 @@ export function SoldVehicleCard({ vehicle }: SoldVehicleCardProps) {
                 {vehicle.trim && (
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">{vehicle.trim}</p>
                 )}
+                <div className="flex items-center gap-1 mt-2">
+                    <span className="inline-flex items-center gap-1 text-[9px] font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-full">
+                        <Facebook className="h-2.5 w-2.5" />
+                        Facebook Marketplace
+                    </span>
+                </div>
             </div>
         </div>
     )

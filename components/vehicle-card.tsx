@@ -3,7 +3,7 @@
 import type React from "react"
 import { formatMileage } from "@/lib/format-mileage"
 import { useState } from "react"
-import { Phone, ChevronLeft, ChevronRight } from "lucide-react"
+import { Phone, ChevronLeft, ChevronRight, Facebook } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
@@ -133,11 +133,15 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
 
         <CardContent className="p-5 flex-1 border-t border-slate-100/50">
           <div className="mb-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0.5">{vehicle.year} {vehicle.make}</p>
-            <h3 className="text-xl font-bold text-slate-900 group-hover/link:text-brand-red transition-colors leading-tight">
-              {vehicle.model}
+            <h3 className="text-xl font-black text-slate-900 group-hover/link:text-brand-red transition-colors leading-tight uppercase">
+              {vehicle.year} {vehicle.make} {vehicle.model} {vehicle.trim}
             </h3>
-            <p className="text-slate-500 text-xs font-medium mt-1 uppercase tracking-wide">{vehicle.trim || "Base"}</p>
+            <div className="flex items-center gap-1 mt-2">
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+                <Facebook className="h-3 w-3" />
+                Facebook Marketplace
+              </span>
+            </div>
           </div>
 
           {/* Specs Grid - Horizontal Lines */}
