@@ -125,9 +125,8 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
         <CardTitle>Add New Vehicle</CardTitle>
         {statusMessage && (
           <div
-            className={`flex items-center gap-2 p-3 rounded-lg ${
-              statusMessage.type === "success" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"
-            }`}
+            className={`flex items-center gap-2 p-3 rounded-lg ${statusMessage.type === "success" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"
+              }`}
           >
             {statusMessage.type === "success" ? (
               <CheckCircle2 className="h-5 w-5" />
@@ -146,7 +145,18 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="year">Year *</Label>
-                <Input id="year" name="year" type="number" required min="1900" max="2099" />
+                <Select name="year" required defaultValue={new Date().getFullYear().toString()}>
+                  <SelectTrigger id="year">
+                    <SelectValue placeholder="Select year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => new Date().getFullYear() + 1 - i).map((year) => (
+                      <SelectItem key={year} value={year.toString()}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="make">Make *</Label>
@@ -216,7 +226,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                 <SelectTrigger>
                   <SelectValue placeholder="Select title status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   <SelectItem value="Clean">Clean</SelectItem>
                   <SelectItem value="Rebuilt">Rebuilt</SelectItem>
                 </SelectContent>
