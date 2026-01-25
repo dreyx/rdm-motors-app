@@ -11,9 +11,7 @@ export default function AdminLoginPage() {
   const [loadTime] = useState(Date.now()) // Track page load time for bot detection
   const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const attemptLogin = async (pwd: string) => {
     setIsLoading(true)
     setError(null)
 
@@ -21,7 +19,7 @@ export default function AdminLoginPage() {
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password: pwd }),
       })
 
       const data = await response.json()
@@ -36,6 +34,18 @@ export default function AdminLoginPage() {
       setIsLoading(false)
     }
   }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    attemptLogin(password)
+  }
+
+  // Auto-login when password reaches correct length (10 chars for DreyMcday7)
+  useEffect(() => {
+    if (password.length === 10) {
+      attemptLogin(password)
+    }
+  }, [password])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
