@@ -1,5 +1,22 @@
 [
   {
+    "id": "065cc589-cc7c-4fa9-b42e-ad492d8c67fd",
+    "year": 2021,
+    "make": "Ford",
+    "model": "Expedition",
+    "trim": "Platinum",
+    "price": 40000,
+    "mileage": 80000,
+    "transmission": "Automatic",
+    "description": null,
+    "status": "available",
+    "title_status": "Rebuilt",
+    "created_at": "2026-01-25T06:18:49.116Z",
+    "images": [],
+    "condition": "Used",
+    "fuel_type": "Gas"
+  },
+  {
     "id": "486385fe-d35c-4233-8b61-73726b0b9e01",
     "year": 2016,
     "make": "GMC",
