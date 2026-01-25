@@ -3,7 +3,7 @@
 import type React from "react"
 import { formatMileage } from "@/lib/format-mileage"
 import { useState } from "react"
-import { Phone, ChevronLeft, ChevronRight, Facebook } from "lucide-react"
+import { Phone, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
@@ -100,7 +100,7 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
 
           {vehicle.price && !isSold && (
             <div className="absolute top-3 right-3 z-10">
-              <div className="bg-white/95 backdrop-blur-sm text-brand-black font-black px-3 py-1.5 text-lg shadow-sm border border-slate-100">
+              <div className="bg-white/95 backdrop-blur-sm text-slate-900 font-black px-3 py-1.5 text-lg shadow-sm border border-slate-100">
                 ${vehicle.price.toLocaleString()}
               </div>
             </div>
@@ -136,13 +136,14 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
             <h3 className="text-xl font-black text-slate-900 group-hover/link:text-brand-red transition-colors leading-tight uppercase">
               {vehicle.year} {vehicle.make} {vehicle.model} {vehicle.trim}
             </h3>
-            <div className="flex items-center gap-1 mt-2">
-              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
-                <Facebook className="h-3 w-3" />
-                Facebook Marketplace
-              </span>
-            </div>
           </div>
+
+
+
+          {/* Description Snippet */}
+          <p className="text-xs text-slate-500 mb-4 leading-relaxed bg-slate-50 p-2.5 rounded-md border border-slate-100">
+            {displayDescription}
+          </p>
 
           {/* Specs Grid - Horizontal Lines */}
           <div className="space-y-2 text-sm mb-4">
@@ -169,10 +170,9 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
             className="w-full bg-brand-black hover:bg-zinc-800 text-white font-bold text-xs uppercase tracking-widest h-12 rounded-none flex items-center justify-center gap-2 transition-all shadow-md hover:-translate-y-0.5"
             asChild
           >
-            <a href="tel:6418624429">
-              <Phone className="h-4 w-4" />
-              <span>Call for Details</span>
-            </a>
+            <Link href={`/vehicles/${vehicle.id}`} className="flex items-center justify-center gap-2">
+              <span>View Details</span>
+            </Link>
           </Button>
         ) : (
           <Button

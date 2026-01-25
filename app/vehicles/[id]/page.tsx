@@ -61,7 +61,7 @@ export default async function VehicleDetailPage({
                 </h1>
                 <p className="text-sm text-slate-500 mt-2 font-bold tracking-wide uppercase">{vehicle.trim}</p>
                 <div className="mt-6 flex items-baseline gap-2">
-                  <span className="text-4xl font-black text-brand-red tracking-tighter">${vehicle.price?.toLocaleString()}</span>
+                  <span className="text-4xl font-black text-slate-900 tracking-tighter">${vehicle.price?.toLocaleString()}</span>
                 </div>
               </div>
 
@@ -76,7 +76,7 @@ export default async function VehicleDetailPage({
                   <div className="bg-red-50 p-2 rounded-lg">
                     <Info className="h-4 w-4 text-brand-red" />
                   </div>
-                  <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest">Property Overview</h2>
+                  <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest">Overview</h2>
                 </div>
                 {vehicle.description ? (
                   <div className="text-sm text-slate-600 font-medium leading-relaxed whitespace-pre-line max-w-none">
@@ -104,7 +104,7 @@ export default async function VehicleDetailPage({
 
                 <div className="flex flex-col mb-6 border-y border-slate-100 py-6">
                   <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">No-Haggle Price</span>
-                  <span className="text-5xl font-black text-brand-red tracking-tighter leading-none">${vehicle.price?.toLocaleString()}</span>
+                  <span className="text-5xl font-black text-slate-900 tracking-tighter leading-none">${vehicle.price?.toLocaleString()}</span>
                 </div>
 
                 <VehicleActions phone="6418624429" vehicleName={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} />
@@ -114,7 +114,7 @@ export default async function VehicleDetailPage({
               <div className="bg-white shadow-sm border border-slate-200 p-6">
                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-50">
                   <Gauge className="h-4 w-4 text-brand-red" />
-                  <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest">Specifications</h2>
+                  <h2 className="text-xs font-black text-slate-900 uppercase tracking-widest">Details</h2>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {[
