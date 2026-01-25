@@ -40,29 +40,6 @@
     "exterior_color": "A"
   },
   {
-    "id": "486385fe-d35c-4233-8b61-73726b0b9e01",
-    "year": 2016,
-    "make": "GMC",
-    "model": "Acadia",
-    "trim": "Denali",
-    "mileage": 105150,
-    "transmission": "Automatic",
-    "price": 8200,
-    "status": "available",
-    "description": "2016 GMC Acadia Denali AWD with a 3.6L v6 automatic transmission with only 105,xxx miles. Fully loaded, runs and drives great, clean inside and out, keyless entry, remote start, power tailgate, leather interior, heated/cooled seats, heated steering wheel, sunroof, backup camera, navigation system, blind spot, lane assist, head up display, good tires, and lots more. Rebuilt Title",
-    "engine": "3.6L V6",
-    "drivetrain": "AWD",
-    "fuel_type": "Gas",
-    "exterior_color": "White",
-    "condition": "Used",
-    "title_status": "Rebuilt",
-    "created_at": "2026-01-24T20:57:41.765198+00:00",
-    "image_url": "/vehicles/vehicle-image-1.jpg",
-    "images": [
-      "/vehicles/vehicle-image-1.jpg"
-    ]
-  },
-  {
     "id": "6c9df6ce-ac88-4db6-96cb-ff08c762666d",
     "year": 2012,
     "make": "Toyota",
