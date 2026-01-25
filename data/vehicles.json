@@ -1,5 +1,22 @@
 [
   {
+    "id": "a7a608dc-1fad-4157-941c-b886d1cde792",
+    "year": 2021,
+    "make": "Final",
+    "model": "Test",
+    "trim": null,
+    "price": 123,
+    "mileage": 123,
+    "transmission": "Automatic",
+    "description": null,
+    "status": "available",
+    "title_status": "Rebuilt",
+    "created_at": "2026-01-25T06:27:23.944Z",
+    "images": [],
+    "condition": "Used",
+    "fuel_type": "Gas"
+  },
+  {
     "id": "065cc589-cc7c-4fa9-b42e-ad492d8c67fd",
     "year": 2021,
     "make": "Ford",
