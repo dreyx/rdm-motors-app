@@ -81,33 +81,6 @@
     "created_at": "2026-01-25T08:27:53.839161Z"
   },
   {
-    "id": "660463325757968",
-    "year": 2009,
-    "make": "Ford",
-    "model": "f-150",
-    "trim": "STX Pickup 4D 6 1/2 ft",
-    "price": 9500,
-    "mileage": 79850,
-    "status": "sold",
-    "description": "Selling a 2009 Ford F-150 4x4, with a 4.6L v8 automatic transmission, runs and drives good, only 79,xxx miles, clean inside and out, tires like new, Rebuilt Title. Any questions, please call: 𝟲𝟰𝟭-𝟴𝟲𝟮-𝟰𝟰𝟮𝟵 RDM Motors LLC 205 Williamson Ave Williamson, IA 50272 Business Hours: Monday–Friday: 10 AM – 5 PM Saturday: By appointment only Contact us to schedule a viewing. To view our inventory, visit our website: www.rdmmotors.com",
-    "vin": null,
-    "stock_number": null,
-    "body_style": "Truck",
-    "condition": "Used",
-    "title_status": "Rebuilt",
-    "engine": null,
-    "transmission": "Automatic",
-    "drivetrain": null,
-    "fuel_type": "Gasoline",
-    "exterior_color": null,
-    "interior_color": null,
-    "image_url": "https://scontent-ord1-1.xx.fbcdn.net/v/t39.30808-6/242207901_10219989025062402_1427618843997321034_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=aa7b47&_nc_ohc=f68S-1-6-X-R_P_",
-    "images": [
-      "https://scontent-ord1-1.xx.fbcdn.net/v/t39.30808-6/242207901_10219989025062402_1427618843997321034_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=aa7b47&_nc_ohc=f68S-1-6-X-R_P_"
-    ],
-    "created_at": "2026-01-25T08:27:53.839206Z"
-  },
-  {
     "id": "5640680542693537",
     "year": 2012,
     "make": "Nissan",
