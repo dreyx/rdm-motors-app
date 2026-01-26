@@ -165,7 +165,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                   <SelectTrigger id="year" className={getErrorClass("year")}>
                     <SelectValue placeholder="Select year" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     {Array.from({ length: new Date().getFullYear() - 1989 }, (_, i) => new Date().getFullYear() + 1 - i).map((year) => (
                       <SelectItem key={year} value={year.toString()}>
                         {year}
@@ -209,7 +209,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                   <SelectTrigger>
                     <SelectValue placeholder="Select style" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Sedan">Sedan</SelectItem>
                     <SelectItem value="SUV">SUV</SelectItem>
                     <SelectItem value="Truck">Truck</SelectItem>
@@ -227,7 +227,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Used">Used</SelectItem>
                     <SelectItem value="New">New</SelectItem>
                     <SelectItem value="Certified">Certified Pre-Owned</SelectItem>
@@ -242,7 +242,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                 <SelectTrigger id="title_status" className={getErrorClass("title_status")}>
                   <SelectValue placeholder="Select title status" />
                 </SelectTrigger>
-                <SelectContent position="popper">
+                <SelectContent position="item-aligned">
                   <SelectItem value="Clean">Clean</SelectItem>
                   <SelectItem value="Rebuilt">Rebuilt</SelectItem>
                 </SelectContent>
@@ -264,7 +264,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Automatic">Automatic</SelectItem>
                     <SelectItem value="Manual">Manual</SelectItem>
                     <SelectItem value="CVT">CVT</SelectItem>
@@ -280,7 +280,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                   <SelectTrigger>
                     <SelectValue placeholder="Select drivetrain" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="FWD">FWD</SelectItem>
                     <SelectItem value="RWD">RWD</SelectItem>
                     <SelectItem value="AWD">AWD</SelectItem>
@@ -294,7 +294,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Gas">Gasoline</SelectItem>
                     <SelectItem value="Diesel">Diesel</SelectItem>
                     <SelectItem value="Hybrid">Hybrid</SelectItem>
