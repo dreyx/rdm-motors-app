@@ -1,5 +1,31 @@
 [
   {
+    "id": "038fc480-234a-4e0a-99ad-8d6c1bc26773",
+    "year": 2026,
+    "make": "sdaf",
+    "model": "asdfas",
+    "trim": "Limited Sport Utility 4D",
+    "price": 9800,
+    "mileage": 128256,
+    "transmission": "Automatic",
+    "description": "saf",
+    "status": "available",
+    "title_status": "Rebuilt",
+    "created_at": "2026-01-26T06:14:26.389Z",
+    "images": [
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1769408059/rdm-motors/arwdqrjhau1vly3prwhf.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1769408060/rdm-motors/qzhnv6qzucfafy8ickan.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1769408060/rdm-motors/f53ffuolgj3odtjqvqa4.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1769408061/rdm-motors/tbyafqc7lqnw1gteqiyx.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1769408062/rdm-motors/rryrk3bo4pizji97gktt.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1769408063/rdm-motors/dqp5w9vo97usg8v38sjd.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1769408064/rdm-motors/jsphbt43fwvamli84i9h.jpg"
+    ],
+    "condition": "Used",
+    "fuel_type": "Gas",
+    "exterior_color": "White"
+  },
+  {
     "id": "b864e4e1-45b2-48f0-9d6c-9f672fa393b3",
     "year": 2012,
     "make": "Toyota",
