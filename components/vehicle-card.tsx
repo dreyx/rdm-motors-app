@@ -3,7 +3,7 @@
 import type React from "react"
 import { formatMileage } from "@/lib/format-mileage"
 import { useState } from "react"
-import { Phone, ChevronLeft, ChevronRight } from "lucide-react"
+import { Phone, ChevronLeft, ChevronRight, Gauge, Settings, Calendar, Fuel, Palette, Activity } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
@@ -159,42 +159,49 @@ export function VehicleCard({ vehicle, isSold = false, viewMode = "list" }: Vehi
             {displayDescription}
           </p>
 
-          {/* Specs Grid - Ford-Style Two Column */}
-          <div className="bg-slate-50 border border-slate-100 rounded-md p-3 mb-4">
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              {vehicle.exterior_color && (
-                <>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500 font-bold">Exterior:</span>
-                    <span className="font-bold text-slate-800 text-right">{vehicle.exterior_color}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500 font-bold">Interior:</span>
-                    <span className="font-bold text-slate-800 text-right">{vehicle.interior_color || "—"}</span>
-                  </div>
-                </>
-              )}
-              {vehicle.drivetrain && (
-                <div className="flex justify-between">
-                  <span className="text-slate-500 font-bold">Drivetrain:</span>
-                  <span className="font-bold text-slate-800 text-right">{vehicle.drivetrain}</span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span className="text-slate-500 font-bold">Transmission:</span>
-                <span className="font-bold text-slate-800 text-right">{vehicle.transmission || "Auto"}</span>
+          {/* Pro Specs Grid */}
+          <div className="grid grid-cols-2 gap-3 mb-5">
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <div className="p-1.5 rounded-full bg-white shadow-sm text-slate-500">
+                <Settings className="w-3.5 h-3.5" />
               </div>
-              {vehicle.engine && (
-                <div className="flex justify-between col-span-2">
-                  <span className="text-slate-500 font-bold">Engine:</span>
-                  <span className="font-bold text-slate-800 text-right truncate max-w-[180px]">{vehicle.engine}</span>
-                </div>
-              )}
-              <div className="flex justify-between col-span-2 pt-1 border-t border-slate-200 mt-1">
-                <span className="text-slate-500 font-bold">Mileage:</span>
-                <span className="font-black text-slate-900">{formatMileage(vehicle.mileage)} mi</span>
+              <div className="flex flex-col">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Transmission</span>
+                <span className="text-xs font-bold text-slate-900 truncate max-w-[100px]">{vehicle.transmission}</span>
               </div>
             </div>
+
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <div className="p-1.5 rounded-full bg-white shadow-sm text-slate-500">
+                <Activity className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Drivetrain</span>
+                <span className="text-xs font-bold text-slate-900">{vehicle.drivetrain || "FWD"}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <div className="p-1.5 rounded-full bg-white shadow-sm text-slate-500">
+                <Gauge className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Mileage</span>
+                <span className="text-xs font-bold text-slate-900">{formatMileage(vehicle.mileage)}</span>
+              </div>
+            </div>
+
+            {vehicle.exterior_color && (
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+                <div className="p-1.5 rounded-full bg-white shadow-sm text-slate-500">
+                  <Palette className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Color</span>
+                  <span className="text-xs font-bold text-slate-900 truncate max-w-[100px]">{vehicle.exterior_color}</span>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Link>

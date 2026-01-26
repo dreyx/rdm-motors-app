@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image"
+
 export function Footer() {
   return (
     <footer className="bg-black text-white py-12 border-t border-white/5">
@@ -23,9 +25,17 @@ export function Footer() {
           {/* Middle: Map & Location */}
           <div className="flex flex-col items-center w-full">
             <div className="relative w-full max-w-[300px] h-32 rounded-xl overflow-hidden bg-zinc-900/50 border border-zinc-800 group transition-all hover:border-zinc-600">
-              {/* Fallback pattern */}
-              <div className="absolute inset-0 bg-[radial-gradient(#333_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
+              {/* Static Map Image (Fallback/Default) */}
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src="/map-preview.png"
+                  alt="RDM Motors Location"
+                  fill
+                  className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                />
+              </div>
 
+              {/* Interactive Map Overlay */}
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3012.1!2d-93.261!3d41.089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87e931995f4fe7dd%3A0xbacec924365e8411!2sRDM+MOTORS+LLC!5e0!3m2!1sen!2sus!4v1706132742964!5m2!1sen!2sus"
                 width="100%"
@@ -35,8 +45,7 @@ export function Footer() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="RDM Motors Location"
-                className="relative z-10 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out onload-fade-in"
-                onLoad={(e) => e.currentTarget.classList.remove('opacity-0')}
+                className="relative z-10 w-full h-full opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none hover:pointer-events-auto"
               ></iframe>
 
               <a

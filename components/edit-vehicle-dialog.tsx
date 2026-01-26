@@ -264,7 +264,7 @@ export function EditVehicleDialog({
                   <SelectTrigger>
                     <SelectValue placeholder="Select style" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Sedan">Sedan</SelectItem>
                     <SelectItem value="SUV">SUV</SelectItem>
                     <SelectItem value="Truck">Truck</SelectItem>
@@ -282,7 +282,7 @@ export function EditVehicleDialog({
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Used">Used</SelectItem>
                     <SelectItem value="New">New</SelectItem>
                     <SelectItem value="Certified">Certified Pre-Owned</SelectItem>
@@ -297,7 +297,7 @@ export function EditVehicleDialog({
                 <SelectTrigger className={`${requiredFieldBase} ${getErrorClass("title_status")}`}>
                   <SelectValue placeholder="Select title status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="item-aligned">
                   <SelectItem value="Clean">Clean</SelectItem>
                   <SelectItem value="Rebuilt">Rebuilt</SelectItem>
                 </SelectContent>
@@ -319,7 +319,7 @@ export function EditVehicleDialog({
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Automatic">Automatic</SelectItem>
                     <SelectItem value="Manual">Manual</SelectItem>
                     <SelectItem value="CVT">CVT</SelectItem>
@@ -335,7 +335,7 @@ export function EditVehicleDialog({
                   <SelectTrigger>
                     <SelectValue placeholder="Select drivetrain" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="FWD">FWD</SelectItem>
                     <SelectItem value="RWD">RWD</SelectItem>
                     <SelectItem value="AWD">AWD</SelectItem>
@@ -349,7 +349,7 @@ export function EditVehicleDialog({
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="item-aligned">
                     <SelectItem value="Gas">Gasoline</SelectItem>
                     <SelectItem value="Diesel">Diesel</SelectItem>
                     <SelectItem value="Hybrid">Hybrid</SelectItem>
