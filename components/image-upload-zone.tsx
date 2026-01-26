@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useCallback, useRef } from "react"
-import { X, GripVertical, Upload } from "lucide-react"
+import { X, GripVertical, Upload, Loader2, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DndContext,
@@ -25,6 +25,8 @@ import { CSS } from "@dnd-kit/utilities"
 interface ImageItem {
   id: string
   url: string
+  uploading?: boolean
+  error?: boolean
 }
 
 interface ImageUploadZoneProps {
@@ -45,47 +47,90 @@ function SortableImage({ image, onRemove, images }: { image: ImageItem; onRemove
     <div
       ref={setNodeRef}
       style={style}
-      className="relative group bg-muted rounded-lg overflow-hidden border-2 border-border"
+      className={`relative group bg-muted rounded-lg overflow-hidden border-2 ${image.error ? "border-red-500" : image.uploading ? "border-yellow-400" : "border-border"
+        }`}
     >
       <div className="aspect-video relative">
         {image.url ? (
           <img src={image.url || "/placeholder.svg"} alt="Vehicle" className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <svg className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+            {image.uploading ? (
+              <Loader2 className="h-8 w-8 text-yellow-500 animate-spin" />
+            ) : image.error ? (
+              <AlertCircle className="h-8 w-8 text-red-500" />
+            ) : (
+              <svg className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            )}
           </div>
         )}
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-          <Button
-            type="button"
-            variant="destructive"
-            size="icon"
-            className="h-8 w-8 shadow-lg"
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onRemove()
-            }}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-          <div
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing h-8 w-8 bg-white rounded shadow-lg flex items-center justify-center hover:bg-gray-100"
-            onClick={(e) => e.preventDefault()}
-          >
-            <GripVertical className="h-4 w-4 text-black" />
+
+        {/* Uploading overlay */}
+        {image.uploading && (
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div className="text-white text-xs font-medium">Uploading...</div>
           </div>
-        </div>
+        )}
+
+        {/* Error overlay */}
+        {image.error && (
+          <div className="absolute inset-0 bg-red-500/40 flex items-center justify-center">
+            <div className="text-white text-xs font-medium">Failed</div>
+          </div>
+        )}
+
+        {/* Action buttons - only show when not uploading */}
+        {!image.uploading && (
+          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            <Button
+              type="button"
+              variant="destructive"
+              size="icon"
+              className="h-8 w-8 shadow-lg"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onRemove()
+              }}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            <div
+              {...attributes}
+              {...listeners}
+              className="cursor-grab active:cursor-grabbing h-8 w-8 bg-white rounded shadow-lg flex items-center justify-center hover:bg-gray-100"
+              onClick={(e) => e.preventDefault()}
+            >
+              <GripVertical className="h-4 w-4 text-black" />
+            </div>
+          </div>
+        )}
       </div>
       <div className="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
         #{images.findIndex((img) => img.id === image.id) + 1}
       </div>
     </div>
   )
+}
+
+// Upload a single image to the server (which uploads to Cloudinary)
+async function uploadImageToCloud(base64Data: string): Promise<string> {
+  const response = await fetch("/api/upload", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ image: base64Data }),
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.error || "Upload failed")
+  }
+
+  const result = await response.json()
+  return result.url
 }
 
 export function ImageUploadZone({ images, onImagesChange }: ImageUploadZoneProps) {
@@ -98,7 +143,7 @@ export function ImageUploadZone({ images, onImagesChange }: ImageUploadZoneProps
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   )
 
-  const compressImage = useCallback(async (file: File): Promise<ImageItem | null> => {
+  const compressImage = useCallback(async (file: File): Promise<string | null> => {
     return new Promise((resolve) => {
       const reader = new FileReader()
 
@@ -130,17 +175,14 @@ export function ImageUploadZone({ images, onImagesChange }: ImageUploadZoneProps
             canvas.height = height
             ctx.drawImage(img, 0, 0, width, height)
 
-            // Start with 65% quality
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.65)
+            // Use 70% quality for good balance
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.70)
 
             // Cleanup
             canvas.width = 0
             canvas.height = 0
 
-            resolve({
-              id: `img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-              url: dataUrl,
-            })
+            resolve(dataUrl)
           } catch {
             resolve(null)
           }
@@ -157,23 +199,71 @@ export function ImageUploadZone({ images, onImagesChange }: ImageUploadZoneProps
 
   const processFiles = useCallback(
     async (files: File[]) => {
-      const imageFiles = files.filter((file) => file.type.startsWith("image/"))
+      let imageFiles = files.filter((file) => file.type.startsWith("image/"))
       if (imageFiles.length === 0) return
+
+      // Sort files by name to maintain the order the user expects from their folder
+      imageFiles = imageFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
 
       setIsProcessing(true)
 
-      const newImages: ImageItem[] = []
+      // Create placeholder items for each image
+      const placeholders: ImageItem[] = imageFiles.map((file, index) => ({
+        id: `img-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+        url: "",
+        uploading: true,
+      }))
 
-      for (const file of imageFiles) {
-        const compressed = await compressImage(file)
-        if (compressed) {
-          newImages.push(compressed)
+      // Add placeholders immediately so user sees progress
+      // We need to track our own copy of the images array for async updates
+      let currentImages = [...images, ...placeholders]
+      onImagesChange(currentImages)
+
+      // Process and upload each image sequentially
+      for (let i = 0; i < imageFiles.length; i++) {
+        const file = imageFiles[i]
+        const placeholderId = placeholders[i].id
+
+        try {
+          // Compress the image
+          const base64Data = await compressImage(file)
+
+          if (!base64Data) {
+            // Mark as failed
+            currentImages = currentImages.map((img) =>
+              img.id === placeholderId
+                ? { ...img, uploading: false, error: true }
+                : img
+            )
+            onImagesChange(currentImages)
+            continue
+          }
+
+          // Upload to Cloudinary via our API
+          const cloudUrl = await uploadImageToCloud(base64Data)
+
+          // Update the placeholder with the real URL
+          currentImages = currentImages.map((img) =>
+            img.id === placeholderId
+              ? { ...img, url: cloudUrl, uploading: false }
+              : img
+          )
+          onImagesChange(currentImages)
+        } catch (error) {
+          console.error("Failed to upload image:", error)
+          // Mark as failed
+          currentImages = currentImages.map((img) =>
+            img.id === placeholderId
+              ? { ...img, uploading: false, error: true }
+              : img
+          )
+          onImagesChange(currentImages)
         }
-        // Small delay between processing
-        await new Promise((resolve) => setTimeout(resolve, 50))
+
+        // Small delay between uploads to avoid overwhelming the server
+        await new Promise((resolve) => setTimeout(resolve, 200))
       }
 
-      onImagesChange([...images, ...newImages])
       setIsProcessing(false)
     },
     [images, onImagesChange, compressImage],
@@ -257,6 +347,11 @@ export function ImageUploadZone({ images, onImagesChange }: ImageUploadZoneProps
     [images, onImagesChange],
   )
 
+  // Count successfully uploaded images
+  const uploadedCount = images.filter((img) => img.url && !img.uploading && !img.error).length
+  const uploadingCount = images.filter((img) => img.uploading).length
+  const failedCount = images.filter((img) => img.error).length
+
   return (
     <div className="space-y-4">
       <div
@@ -265,11 +360,10 @@ export function ImageUploadZone({ images, onImagesChange }: ImageUploadZoneProps
         onDragLeave={handleDragLeave}
         onPaste={handlePaste}
         tabIndex={0}
-        className={`border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${
-          isDraggingOver
-            ? "border-primary bg-primary/10 scale-[1.02]"
-            : "border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50"
-        } ${isProcessing ? "opacity-50 pointer-events-none" : ""}`}
+        className={`border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${isDraggingOver
+          ? "border-primary bg-primary/10 scale-[1.02]"
+          : "border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50"
+          } ${isProcessing ? "opacity-50 pointer-events-none" : ""}`}
         onClick={() => !isProcessing && fileInputRef.current?.click()}
       >
         <div className="space-y-3 flex flex-col items-center">
@@ -300,7 +394,10 @@ export function ImageUploadZone({ images, onImagesChange }: ImageUploadZoneProps
       {images.length > 0 && (
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">
-            {images.length} image{images.length !== 1 ? "s" : ""} • Drag to reorder
+            {uploadedCount} uploaded
+            {uploadingCount > 0 && ` • ${uploadingCount} uploading`}
+            {failedCount > 0 && <span className="text-red-500"> • {failedCount} failed</span>}
+            {uploadedCount > 0 && " • Drag to reorder"}
           </p>
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={images.map((img) => img.id)} strategy={rectSortingStrategy}>

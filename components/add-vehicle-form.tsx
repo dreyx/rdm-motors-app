@@ -16,6 +16,8 @@ import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
 interface ImageItem {
   id: string
   url: string
+  uploading?: boolean
+  error?: boolean
 }
 
 interface AddVehicleFormProps {
@@ -48,7 +50,16 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
       }
     })
 
-    if (images.length < 1) {
+    // Only count images that have successfully uploaded (have URLs and aren't uploading/failed)
+    const successfulImages = images.filter(img => img.url && !img.uploading && !img.error)
+    const uploadingImages = images.filter(img => img.uploading)
+
+    if (uploadingImages.length > 0) {
+      setStatusMessage({ type: "error", message: "Please wait for all images to finish uploading." })
+      return
+    }
+
+    if (successfulImages.length < 1) {
       newFailedFields.add("images")
     }
 
@@ -73,9 +84,8 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
 
     setIsSubmitting(true)
 
-    // Add images to form data as JSON
-    // We only need the URLs
-    const imageUrls = images.map(img => img.url);
+    // Add images to form data as JSON - only URLs from successfully uploaded images
+    const imageUrls = successfulImages.map(img => img.url);
     formData.append("images", JSON.stringify(imageUrls));
 
     try {
