@@ -56,13 +56,15 @@ async function initData() {
 }
 
 export async function getAllVehicles(): Promise<Vehicle[]> {
-  // Priority: GitHub API (Always Fresh)
+  // Priority: GitHub API (with retry and caching handled in github-store)
   if (process.env.GITHUB_TOKEN) {
     try {
       const vehicles = await getVehiclesFromGitHub();
-      if (vehicles.length > 0) return vehicles;
+      return vehicles; // Return even if empty - github-store handles caching/retries
     } catch (e) {
-      console.error("Failed to fetch from GitHub, falling back to FS", e);
+      console.error("Failed to fetch from GitHub:", e);
+      // github-store will return cached data on failure, so this shouldn't happen often
+      return [];
     }
   }
 

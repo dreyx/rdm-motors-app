@@ -97,7 +97,16 @@ export function AdminDashboard() {
         </div>
 
         <div className="lg:col-span-2">
-          {vehiclesLoading ? (
+          {vehiclesError ? (
+            <div className="bg-white rounded-xl border border-red-200 p-12 flex flex-col items-center justify-center">
+              <div className="text-red-600 text-lg font-semibold mb-2">Failed to load inventory</div>
+              <p className="text-neutral-600 mb-4 text-center">There was an issue connecting to the server. Please try again.</p>
+              <Button onClick={handleRefresh} variant="outline" className="border-red-300 text-red-600 hover:bg-red-50">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Retry
+              </Button>
+            </div>
+          ) : vehiclesLoading ? (
             <div className="bg-white rounded-xl border border-neutral-200 p-12 flex flex-col items-center justify-center">
               <Loader2 className="h-8 w-8 text-red-600 animate-spin mb-4" />
               <p className="text-neutral-600">Loading inventory...</p>
