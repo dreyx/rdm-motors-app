@@ -34,7 +34,8 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
     setStatusMessage(null)
     setFailedFields(new Set())
 
-    const formData = new FormData(e.currentTarget)
+    const formElement = e.currentTarget
+    const formData = new FormData(formElement)
     const newFailedFields = new Set<string>()
 
     // Validation
@@ -90,7 +91,7 @@ export function AddVehicleForm({ onSuccess }: AddVehicleFormProps) {
       })
 
       // Reset form
-      e.currentTarget.reset()
+      formElement.reset()
       setImages([])
       setFailedFields(new Set())
       router.refresh()
