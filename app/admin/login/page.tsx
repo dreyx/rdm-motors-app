@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
     attemptLogin(password)
   }
 
-  // Auto-login when password reaches correct length (10 chars for DreyMcday7)
+  // Auto-login when password reaches correct length
   useEffect(() => {
     if (password.length === 10) {
       attemptLogin(password)
