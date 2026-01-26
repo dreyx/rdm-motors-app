@@ -61,6 +61,7 @@ export function EditVehicleDialog({
   onSuccess?: () => void
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [drivetrain, setDrivetrain] = useState(vehicle.drivetrain || "")
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [status, setStatus] = useState("")
@@ -91,6 +92,7 @@ export function EditVehicleDialog({
     setSuccess(false)
     setStatus("")
     setFailedFields(new Set())
+    setDrivetrain(vehicle.drivetrain || "")
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, vehicle.id])
 
@@ -331,7 +333,10 @@ export function EditVehicleDialog({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="drivetrain">Drivetrain</Label>
-                <Select name="drivetrain" defaultValue={vehicle.drivetrain || ""}>
+                <Select
+                  value={drivetrain}
+                  onValueChange={setDrivetrain}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select drivetrain" />
                   </SelectTrigger>
@@ -342,6 +347,7 @@ export function EditVehicleDialog({
                     <SelectItem value="4WD">4WD</SelectItem>
                   </SelectContent>
                 </Select>
+                <input type="hidden" name="drivetrain" value={drivetrain} />
               </div>
               <div>
                 <Label htmlFor="fuel_type">Fuel Type</Label>
