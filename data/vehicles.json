@@ -21,6 +21,8 @@
     "drivetrain": "AWD",
     "fuel_type": "Gas",
     "exterior_color": "White",
-    "interior_color": "Black"
+    "interior_color": "Black",
+    "stock_number": null,
+    "vin": null
   }
 ]
