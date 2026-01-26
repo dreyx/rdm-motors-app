@@ -8,7 +8,7 @@
     "price": 8200,
     "mileage": 105150,
     "transmission": "Automatic",
-    "description": null,
+    "description": "2016 GMC Acadia Denali AWD with a 3.6L v6 automatic transmission with only 105,xxx miles. Fully loaded, runs and drives great, clean inside and out, keyless entry, remote start, power tailgate, leather interior, heated/cooled seats, heated steering wheel, sunroof, backup camera, navigation system, blind spot, lane assist, head up display, good tires, and lots more. Rebuilt Title",
     "status": "available",
     "title_status": "Rebuilt",
     "created_at": "2026-01-26T05:55:45.656Z",
@@ -18,7 +18,12 @@
     "condition": "Used",
     "engine": "3.6L V6",
     "drivetrain": "AWD",
-    "fuel_type": "Gas"
+    "fuel_type": "Gas",
+    "stock_number": null,
+    "body_style": "Sedan",
+    "exterior_color": null,
+    "interior_color": null,
+    "vin": null
   },
   {
     "id": "8cfaf4a1-e213-404a-a75d-1a3fe3f31fa8",
