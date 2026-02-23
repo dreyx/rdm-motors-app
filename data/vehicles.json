@@ -1,5 +1,32 @@
 [
   {
+    "id": "a11b9aa1-d09f-4cae-a9c5-cf4766bd8778",
+    "year": 2016,
+    "make": "Ram",
+    "model": "2500",
+    "trim": "Tradesman",
+    "price": 23500,
+    "mileage": 129180,
+    "transmission": "Automatic",
+    "description": "2016 Ram 2500 4x4 with a 6.7L 6 cylinder turbo diesel engine, automatic transmission with only 129,xxx miles. Runs and drives great, clean inside and out, keyless entry, new tires, came from the west coast zero rust, 8ft bed, seats 6, backup camera, rear parking sensors, and lots more.",
+    "status": "available",
+    "title_status": "Rebuilt",
+    "created_at": "2026-02-23T19:23:40.701Z",
+    "images": [
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1771874565/rdm-motors/kmki9rjbrrjqnit3woke.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1771874555/rdm-motors/zmjpomkxck0s8jmunlix.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1771874556/rdm-motors/ttpzmskljhtpdz6kgvkx.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1771874558/rdm-motors/vmp8ghddxg1efm6wn5v8.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1771874560/rdm-motors/fgmb7zewz5ldzsjnubm2.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1771874561/rdm-motors/iebdpdknlsgrmixgx9xn.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1771874563/rdm-motors/e5wguctybltlxhmd1g62.jpg"
+    ],
+    "condition": "Used",
+    "engine": "6.7L 6 cylinder",
+    "drivetrain": "4WD",
+    "fuel_type": "Diesel"
+  },
+  {
     "id": "b864e4e1-45b2-48f0-9d6c-9f672fa393b3",
     "year": 2012,
     "make": "Toyota",
