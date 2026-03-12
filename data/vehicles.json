@@ -1,5 +1,32 @@
 [
   {
+    "id": "49d0ec34-561e-47e6-87da-745c2e8661e6",
+    "year": 2017,
+    "make": "RAM",
+    "model": "2500",
+    "trim": "Tradesman",
+    "price": 24500,
+    "mileage": 91200,
+    "transmission": "Automatic",
+    "description": "2017 RAM 2500 4x4 with a turbo diesel 6.7L 6 cylinder automatic transmission with only 91,xxx miles. Runs and drives great, clean inside and out, keyless entry, tow package with gooseneck hitch, rear parking sensors , backup camera, 8ft bed, seats 6, good tires, been deleted and tuned, has a banks intake and banks monster ram.",
+    "status": "available",
+    "title_status": "Rebuilt",
+    "created_at": "2026-03-12T23:42:08.751Z",
+    "images": [
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1773358902/rdm-motors/temufm7k17htpkftadtx.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1773358897/rdm-motors/uu1scz6gw32fugwmqowv.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1773358898/rdm-motors/nip1phacnfhylq4plzgp.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1773358900/rdm-motors/tn3ovqwqihefifwu16cm.jpg",
+      "https://res.cloudinary.com/dy1bkcqpc/image/upload/v1773358903/rdm-motors/nieiwvf3kdcqy1lziich.jpg"
+    ],
+    "condition": "Used",
+    "engine": "6.7L 6 cylinder",
+    "drivetrain": "4WD",
+    "fuel_type": "Diesel",
+    "exterior_color": "Silver",
+    "interior_color": "Grey"
+  },
+  {
     "id": "a11b9aa1-d09f-4cae-a9c5-cf4766bd8778",
     "year": 2016,
     "make": "Ram",
